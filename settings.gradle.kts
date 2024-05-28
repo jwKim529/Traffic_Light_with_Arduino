@@ -16,6 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        //maven { setUrl("https://devrepo.kakaomobility.com/repository/kakao-mobility-android-knsdk-public/")}
+        //maven { setUrl("https://www.jitpack.io")}
+        maven { url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/") }
+        maven {
+            setUrl("https://repository.map.naver.com/archive/maven")
+        }
     }
 }
 

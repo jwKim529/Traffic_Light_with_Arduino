@@ -1,0 +1,326 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 중앙 사각형 -->
+    <View
+        android:id="@+id/center"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent" />
+
+    <!-- 북쪽 도로 -->
+    <View
+        android:id="@+id/nt_cline"
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_above="@id/center"
+        android:layout_centerHorizontal="true"
+        android:background="#000000" />
+    <View
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_above="@id/center"
+        android:layout_alignLeft="@id/center"
+        android:background="#000000" />
+    <View
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_above="@id/center"
+        android:layout_alignRight="@id/center"
+        android:background="#000000" />
+
+    <!-- 남쪽 도로 -->
+    <View
+        android:id="@+id/st_cline"
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/center"
+        android:layout_centerHorizontal="true"
+        android:background="#000000" />
+    <View
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/center"
+        android:layout_alignLeft="@id/center"
+        android:background="#000000" />
+    <View
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/center"
+        android:layout_alignRight="@id/center"
+        android:background="#000000" />
+
+    <!-- 동쪽 도로 -->
+    <View
+        android:id="@+id/et_cline"
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_toRightOf="@id/center"
+        android:layout_centerVertical="true"
+        android:background="#000000" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_toRightOf="@id/center"
+        android:layout_alignTop="@id/center"
+        android:background="#000000" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_toRightOf="@id/center"
+        android:layout_alignBottom="@id/center"
+        android:background="#000000" />
+
+    <!-- 서쪽 도로 -->
+    <View
+        android:id="@+id/wt_cline"
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_toLeftOf="@id/center"
+        android:layout_centerVertical="true"
+        android:background="#000000" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_toLeftOf="@id/center"
+        android:layout_alignTop="@id/center"
+        android:background="#000000" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_toLeftOf="@id/center"
+        android:layout_alignBottom="@id/center"
+        android:background="#000000" />
+
+
+
+
+    <!-- 북쪽 신호등 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/nt_cline"
+        android:layout_toStartOf="@id/nt_cline"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp">
+
+        <!-- 북쪽 직진 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:id="@+id/north_straight_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- 북쪽 직진 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/north_straight_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <!-- 북쪽 좌회전 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:id="@+id/north_left_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/darker_gray" />
+            <!-- 북쪽 좌회전 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/north_left_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 동쪽 신호등 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignLeft="@id/et_cline"
+        android:layout_above="@id/et_cline"
+        android:layout_centerVertical="true"
+        android:padding="2dp">
+
+        <!-- 동쪽 직진 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/east_straight_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- 동쪽 직진 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/east_straight_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <!-- 동쪽 좌회전 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/east_left_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/darker_gray" />
+            <!-- 동쪽 좌회전 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/east_left_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 남쪽 신호등 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/st_cline"
+        android:layout_toEndOf="@id/st_cline"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp">
+
+        <!-- 남쪽 직진 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:id="@+id/south_straight_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- 남쪽 직진 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/south_straight_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <!-- 남쪽 좌회전 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:id="@+id/south_left_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="@android:color/darker_gray" />
+            <!-- 남쪽 좌회전 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/south_left_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 서쪽 신호등 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignRight="@id/wt_cline"
+        android:layout_below="@id/wt_cline"
+        android:layout_centerVertical="true"
+        android:padding="4dp">
+
+        <!-- 서쪽 직진 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <!-- 서쪽 직진 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/west_straight_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+            <View
+                android:id="@+id/west_straight_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="1dp"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- 서쪽 좌회전 신호 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <!-- 서쪽 직진 신호 남은 시간 -->
+            <TextView
+                android:id="@+id/west_left_time"
+                android:text="123"
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+            <View
+                android:id="@+id/west_left_signal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="1dp"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

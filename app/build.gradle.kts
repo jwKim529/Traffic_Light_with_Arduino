@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
 }
@@ -5,6 +7,10 @@ plugins {
 android {
     namespace = "com.example.traffic_light_with_arduino"
     compileSdk = 34
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.example.traffic_light_with_arduino"
@@ -14,6 +20,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "SEOUL_API_KEY", getApiKey("SEOUL_API_KEY"))
     }
 
     buildTypes {
@@ -43,4 +50,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    //implementation ("com.kakao.sdk:v2-all:2.20.1") // 전체 모듈 설치, 2.11.0 버전부터 지원
+
+    //implementation("com.kakaomobility.knsdk:knsdk_ui:1.8.1")
+    implementation ("com.naver.maps:map-sdk:3.18.0")
+}
+
+fun getApiKey(propertyKey: String): String {
+    val properties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        properties.load(localPropertiesFile.inputStream())
+    }
+    return properties.getProperty(propertyKey) ?: ""
 }

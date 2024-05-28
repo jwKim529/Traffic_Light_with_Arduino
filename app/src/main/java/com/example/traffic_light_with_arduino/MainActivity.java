@@ -2,13 +2,12 @@ package com.example.traffic_light_with_arduino;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Build;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,18 +20,31 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
+
+    private GlobalApplication myApp = (GlobalApplication) getApplication();
+
+    private final String SERVER_IP;
+    private final int SERVER_PORT;
+
+    private Socket socket;
+    private OutputStream outputStream;
+
     private MapView mapView;
     private ViewGroup mapViewContainer;
     private TextView locationTextView;
-    private Socket socket;
-    private final String SERVER_IP = "10.10.108.148";
-    private final int SERVER_PORT = 9999;
-    private OutputStream outputStream;
 
     private double currentLatitude;
     private double currentLongitude;
+
+    private final int CLOSE_DISTANCE = 50;
+
+    public MainActivity() {
+        this.SERVER_IP = myApp.getSERVER_IP();
+        this.SERVER_PORT = myApp.getSERVER_PORT();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +70,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
         // 송신 버튼 설정
         Button sendButton = findViewById(R.id.send_button);
-        sendButton.setOnClickListener(view -> sendMessage("hello_world"));
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage("hello_world");
+            }
+        });
     }
 
     private void checkPermissions() {
@@ -82,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 // 서버로부터 데이터를 받는 메서드 호출
                 receivedDataFromServer();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("연결 실패: " + e.getMessage());
             }
         }).start();
     }
@@ -171,8 +188,64 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         mapView.removeAllPOIItems(); // 기존 마커 제거
         mapView.addPOIItem(marker); // 새로운 마커 추가
 
+        MapPoint.GeoCoordinate geoCoordinate = mapPoint.getMapPointGeoCoord();
+        double latitude = geoCoordinate.latitude;
+        double longitude = geoCoordinate.longitude;
+
+        // 특정 위치에서 가장 가까운 신호등의 정보를 가져오는 함수 호출
+        getNearestTrafficSignalInfo(latitude, longitude);
+
         // 클릭한 위치의 위도와 경도를 텍스트 뷰에 설정
-        locationTextView.setText(String.format("Location: %f, %f\nMark Location: %f, %f", currentLatitude, currentLongitude, mapPointGeo.latitude, mapPointGeo.longitude));
+        // locationTextView.setText(String.format("Location: %f, %f\nMark Location: %f, %f", currentLatitude, currentLongitude, mapPointGeo.latitude, mapPointGeo.longitude));
+
+    }
+
+    private void getNearestTrafficSignalInfo(double latitude, double longitude) {
+        List<TrafficIntersection> intersections = myApp.getIntersectionList();
+        TrafficIntersection targetData = null;
+
+        double min = 99999.99;
+        for (TrafficIntersection intersection : intersections) {
+            double calcData = (
+                    Math.abs(intersection.getMapCtptIntLat()-latitude)
+                            +Math.abs(intersection.getMapCtptIntLot()-longitude)
+            );
+
+            if(min > calcData){
+                min = calcData;
+                targetData = intersection;
+            }
+        }
+        double distance = calculateDistance(
+                latitude, longitude,
+                targetData.getMapCtptIntLat(),
+                targetData.getMapCtptIntLot());
+
+        if(distance < CLOSE_DISTANCE) {
+            TrafficLightDialog dialog = new TrafficLightDialog(MainActivity.this);
+            dialog.show();
+        } else {
+            locationTextView.setText(String.format("서울 지역이 아니거나 신호등에서 너무 먼 지점입니다"));
+        }
+    }
+
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final double EARTH_RADIUS = 6371000; // 지구 반지름 (미터 단위)
+        double lat1Rad = Math.toRadians(lat1);
+        double lon1Rad = Math.toRadians(lon1);
+        double lat2Rad = Math.toRadians(lat2);
+        double lon2Rad = Math.toRadians(lon2);
+
+        double deltaLat = lat2Rad - lat1Rad;
+        double deltaLon = lon2Rad - lon1Rad;
+
+        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                        Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS * c;
     }
 
     @Override
